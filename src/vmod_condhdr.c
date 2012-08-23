@@ -13,6 +13,8 @@ init_function(struct vmod_priv *priv, const struct VCL_conf *conf)
 	return (0);
 }
 
+/* The following mutex struct and header_init_re has been copied from libvmod-header : https://github.com/varnish/libvmod-header
+
 /*
  * This mutex is used to avoid having two threads that initializes the same
  * regex at the same time. While it means that there's a single, global
@@ -39,6 +41,9 @@ header_init_re(struct vmod_priv *priv, const char *s)
 		pthread_mutex_unlock(&header_mutex);
 	}
 }
+
+/*** End of copied code ***/
+
 /**
 * Set a header if input string matches regexp
 * @param struct sess
