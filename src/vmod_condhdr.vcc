@@ -1,0 +1,3 @@
+Module condhdr
+Init init_function
+Function VOID set(PRIV_CALL,STRING, STRING, STRING, STRING)

@@ -1,0 +1,23 @@
+varnishtest "Test 0 setheader ok match url"
+
+server s1 {
+       rxreq
+       expect req.url == "/toto"
+       txresp
+} -start
+
+varnish v1 -vcl+backend {
+	import condhdr from "${vmod_topbuild}/src/.libs/libvmod_condhdr.so";
+
+	sub vcl_deliver {
+		condhdr.set(req.url,"^/toto$","Cache-Control","no-store");
+	}
+} -start
+
+client c1 {
+	txreq -url "/toto"
+	rxresp
+	expect resp.http.Cache-Control == "no-store"
+}
+
+client c1 -run

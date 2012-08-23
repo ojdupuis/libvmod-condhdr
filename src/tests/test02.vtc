@@ -1,0 +1,24 @@
+varnishtest "Test 2 many setheaders last overrides others "
+
+server s1 {
+       rxreq
+       expect req.url == "/toto"
+       txresp
+} -start
+
+varnish v1 -vcl+backend {
+	import condhdr from "${vmod_topbuild}/src/.libs/libvmod_condhdr.so";
+
+	sub vcl_deliver {
+		condhdr.set(req.url,"^/toto$","Cache-Control","max-age=0s");
+		condhdr.set(req.url,"^/toto$","Cache-Control","no-store");
+	}
+} -start
+
+client c1 {
+	txreq -url "/toto"
+	rxresp
+	expect resp.http.Cache-Control == "no-store"
+}
+
+client c1 -run

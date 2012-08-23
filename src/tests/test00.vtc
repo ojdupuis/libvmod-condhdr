@@ -1,0 +1,23 @@
+varnishtest "Test 0 condhdr ok match root"
+
+server s1 {
+       rxreq
+       expect req.url == "/"
+       txresp
+} -start
+
+varnish v1 -vcl+backend {
+	import condhdr from "${vmod_topbuild}/src/.libs/libvmod_condhdr.so";
+
+	sub vcl_deliver {
+		condhdr.set(req.url,"^/$","OLIVIER","DUPUIS");
+	}
+} -start
+
+client c1 {
+	txreq -url "/"
+	rxresp
+	expect resp.http.OLIVIER == "DUPUIS"
+}
+
+client c1 -run
