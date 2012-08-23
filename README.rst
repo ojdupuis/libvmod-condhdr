@@ -33,6 +33,8 @@ Useful when Varnish is used to set the Cache-Control headers in that case you wo
 it allows more compact configuration file
 If more than one condhdr.set is matched by string, the last one overrides the others
 
+Thanks : mutex lock taken from : libvmod-header https://github.com/varnish/libvmod-header/
+
 FUNCTIONS
 =========
 
