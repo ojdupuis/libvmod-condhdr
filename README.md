@@ -1,3 +1,0 @@
-libvmod-condhdr
-==============
-
